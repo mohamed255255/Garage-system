@@ -9,24 +9,29 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity(name = "Users")
 public class User {
 
-    @Id
+// Hibernate validators put validation constraints for DB columns if put on entity level
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotBlank
     private String name;
     
     @Column(unique = true)
+    @NotBlank 
     private String email;
   
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //will not be included in JSON output
+    @NotNull
     private String password;
 
     private LocalDate createdAt;
@@ -38,12 +43,13 @@ public class User {
     private Bill bill;
 
     @OneToMany(mappedBy = "user")
+    @NotEmpty
     private List<Reservation> reservationList ;
 
     public User() {
     }
 
-    // Getters and Setters
+
 
     public int getId() {
         return id;
